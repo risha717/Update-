@@ -7,9 +7,6 @@ from telegram.ext import Application, CommandHandler, ContextTypes
 # ===== CONFIG =====
 BOT_TOKEN = "8006015641:AAHMiqhkmtvRmdLMN1Rbz2EnwsIrsGfH8qU"
 ADMIN_ID = 1858324638
-VIDEO_CHANNEL_ID = -1003872857468
-CHANNEL_USERNAME = "@CineflixOfficialbd"
-
 VIDEO_DB = "video_map.json"
 
 # ===== LOGGING =====
@@ -54,13 +51,12 @@ async def save_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
     code = context.args[0]
     VIDEO_MAP[code] = update.message.video.file_id
 
-    # Save to JSON
     with open(VIDEO_DB, "w") as f:
         json.dump(VIDEO_MAP, f)
 
     await update.message.reply_text(f"✅ Saved video for shortcode: {code}")
 
-# Optional: list saved videos
+# ===== OPTIONAL =====
 async def list_videos(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.effective_user.id != ADMIN_ID:
         return
@@ -70,7 +66,6 @@ async def list_videos(update: Update, context: ContextTypes.DEFAULT_TYPE):
     msg = "\n".join([f"{k} → {v}" for k,v in VIDEO_MAP.items()])
     await update.message.reply_text(f"Saved videos:\n{msg}")
 
-# Optional: delete a video
 async def delete_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.effective_user.id != ADMIN_ID:
         return
